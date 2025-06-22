@@ -1,19 +1,35 @@
-//  Main.java
+
+// Main.java
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Get Logger instances
-        Logger logger1 = Logger.getInstance();
-        Logger logger2 = Logger.getInstance();
+        Scanner scanner = new Scanner(System.in);
 
-        // Log messages
-        logger1.log("First log message.");
-        logger2.log("Second log message.");
+        System.out.println("Enter document type (word/pdf/excel): ");
+        String docType = scanner.nextLine().toLowerCase();
 
-        // Verify both references point to the same object
-        if (logger1 == logger2) {
-            System.out.println("Both logger1 and logger2 are the same instance.");
-        } else {
-            System.out.println("Different instances found. Singleton pattern failed.");
+        DocumentFactory factory;
+
+        switch (docType) {
+            case "word":
+                factory = new WordDocumentFactory();
+                break;
+            case "pdf":
+                factory = new PdfDocumentFactory();
+                break;
+            case "excel":
+                factory = new ExcelDocumentFactory();
+                break;
+            default:
+                System.out.println("❌ Invalid document type.");
+                scanner.close();
+                return;
         }
+
+        Document document = factory.createDocument();
+        document.open();
+
+        scanner.close();
     }
 }
